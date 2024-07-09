@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import Any, List, Optional
 from pydantic import BaseModel, Field
 
 from crawlers.douyin.web.utils import TokenManager, VerifyFpManager
@@ -164,6 +164,25 @@ class FollowFeed(BaseRequestModel):
     pull_type: str = ""
 
 
+class PostSearch(BaseRequestModel):
+    # 0:综合排序,1:点赞排序,2:最新排序
+    filter_selected: Optional[dict[str, str]] = None
+    keyword: str
+    offset: int = 0
+    count: int = 10
+    search_channel: str = "aweme_general"
+    search_source: str = "normal_search"
+    # 过滤搜索 (0:不过滤,1:过滤)
+    is_filter_search: int = 0
+    list_type: str = "single"
+    query_correct_type: int = 1
+    need_filter_settings: int = 1
+    from_group_id: str = ""
+    version_code:int =190600
+    version_name:str = "19.6.0"
+    update_version_code: int  = 170400
+
+
 class PostRelated(BaseRequestModel):
     aweme_id: str
     count: int = 20
@@ -283,6 +302,5 @@ class URL_List(BaseModel):
     urls: List[str] = [
         "https://test.example.com/xxxxx/",
         "https://test.example.com/yyyyy/",
-        "https://test.example.com/zzzzz/"
+        "https://test.example.com/zzzzz/",
     ]
-

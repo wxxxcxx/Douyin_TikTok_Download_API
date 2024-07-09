@@ -43,13 +43,16 @@ class DouyinAPIEndpoints:
     GENERAL_SEARCH = f"{DOUYIN_DOMAIN}/aweme/v1/web/general/search/single/"
 
     # 视频搜索 (Video Search)
-    VIDEO_SEARCH = f"{DOUYIN_DOMAIN}/aweme/v1/web/search/item/"
+    POST_SEARCH = f"{DOUYIN_DOMAIN}/aweme/v1/web/search/item/"
 
     # 用户搜索 (User Search)
     USER_SEARCH = f"{DOUYIN_DOMAIN}/aweme/v1/web/discover/search/"
 
     # 直播间搜索 (Live Search)
     LIVE_SEARCH = f"{DOUYIN_DOMAIN}/aweme/v1/web/live/search/"
+
+    # 作品搜索 (Post Search)
+    POST_SEARCH = f"{DOUYIN_DOMAIN}/aweme/v1/web/general/search/single/"
 
     # 作品信息 (Post Detail)
     POST_DETAIL = f"{DOUYIN_DOMAIN}/aweme/v1/web/aweme/detail/"

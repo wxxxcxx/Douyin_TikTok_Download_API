@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from fastapi import APIRouter, Body, Query, Request, HTTPException  # 导入FastAPI组件
 from app.api.models.APIResponseModel import ResponseModel, ErrorResponseModel  # 导入响应模型
@@ -8,6 +8,68 @@ from crawlers.douyin.web.web_crawler import DouyinWebCrawler  # 导入抖音Web�
 
 router = APIRouter()
 DouyinWebCrawler = DouyinWebCrawler()
+
+# 获取搜索作品数据
+@router.get("/fetch_search_videos", response_model=ResponseModel, summary="搜索视频数据/Get search video data")
+async def fetch_search_videos(request: Request,
+                              keyword: str = Query(example="抖音", description="搜索关键词/Search keyword"),
+                              content_type: Optional[int] = Query(default=None, description="内容类型/Content type"),
+                              sort_type: Optional[int] = Query(default=None, description="排序方式/Sort type"),
+                              publish_time: Optional[int] = Query(default=None, description="发布时间/Publish time"),
+                              filter_duration:Optional[str] = Query(default=None, description="筛选时长/Filter duration"),
+                              offset: int = Query(default=0, description="便宜/Offset"),
+                              count: int = Query(default=10, description="每页数量/Number per page")):
+    """
+    # [中文]
+    ### 用途:
+    - 搜索指定关键词的视频
+    ### 参数:
+    - keyword: 关键词
+    - content_type: 内容类型 （1：视频，2：文章）
+    - sort_type: 排序方式（0:综合排序,1:点赞排序,2:最新排序）
+    - publish_time: 发布时间（7，30，180）
+    - filter_duration: 筛选时长（0-1，1-5，5-10000）
+    - offset: 偏移/Oursor
+    - count: 每页数量/Number per page
+    ### 返回:
+    - 搜索数据
+
+    # [English]
+    ### Purpose:
+    - Search videos
+    ### Parameters:
+    - keyword: Keyword
+    - content_type: Content type
+    - sort_type: Sort type
+    - publish_time: Publish time
+    - filter_duration: Filter duration
+    - offset: Offset
+    - count: Number per page
+    ### Return:
+    - Search data
+
+    # [示例/Example]
+    keyword = "抖音"
+    content_type = 1
+    sort_type = 0
+    publish_time = 7
+    filter_duration = 0-1
+    max_cursor = 0
+    count = 20
+    """
+    try:
+        data = await DouyinWebCrawler.fetch_search_videos(keyword, content_type, sort_type, publish_time, filter_duration, offset, count)
+        return ResponseModel(code=200,
+                             router=request.url.path,
+                             data=data)
+    except Exception as e:
+        print("{}",e)
+        status_code = 400
+        detail = ErrorResponseModel(code=status_code,
+                                    router=request.url.path,
+                                    params=dict(request.query_params),
+                                    )
+        raise HTTPException(status_code=status_code, detail=detail.dict())
 
 
 # 获取单个作品数据
